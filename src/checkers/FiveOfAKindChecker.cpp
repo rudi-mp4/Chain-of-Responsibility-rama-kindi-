@@ -1,14 +1,7 @@
-#include "checkers/FiveOfAKindChecker.h"
+#include "../../include/checkers/FiveOfAKindChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool FiveOfAKindChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {5}) && !isFlush(hand);
-}
-
-HandRank FiveOfAKindChecker::currentRank() const {
+HandRank FiveOfAKindChecker::check(const Hand& hand) const {
+    printf("Ini tangan Five of a kind");
     return HandRank::FiveOfAKind;
 }
 

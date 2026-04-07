@@ -1,14 +1,7 @@
-#include "checkers/FullHouseChecker.h"
+#include "../../include/checkers/FullHouseChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool FullHouseChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {3, 2}) && !isFlush(hand);
-}
-
-HandRank FullHouseChecker::currentRank() const {
+HandRank FullHouseChecker::check(const Hand& hand) const {
+    printf("Ini tangan Full House");
     return HandRank::FullHouse;
 }
 

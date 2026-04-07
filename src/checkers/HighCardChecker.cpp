@@ -1,12 +1,7 @@
-#include "checkers/HighCardChecker.h"
+#include "../../include/checkers/HighCardChecker.h"
 
-bool HighCardChecker::matches(const Hand& hand) const {
-    (void)hand;
-    return true;
-}
-
-HandRank HighCardChecker::currentRank() const {
+HandRank HighCardChecker::check(const Hand& hand) const {
+    printf("Ini tangan High Card");
     return HandRank::HighCard;
 }
-
 

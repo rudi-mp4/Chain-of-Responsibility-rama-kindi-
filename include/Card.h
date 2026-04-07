@@ -17,8 +17,4 @@ struct Card {
 
 using Hand = std::array<Card, 5>;
 
-std::string suitToString(Suit suit);
-std::string rankToString(int rank);
-std::string cardToString(const Card& card);
-std::string handToString(const Hand& hand);
 Hand generateRandomHand();

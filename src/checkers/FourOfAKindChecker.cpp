@@ -1,15 +1,7 @@
-#include "checkers/FourOfAKindChecker.h"
+#include "../../include/checkers/FourOfAKindChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool FourOfAKindChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {4, 1});
-}
-
-HandRank FourOfAKindChecker::currentRank() const {
+HandRank FourOfAKindChecker::check(const Hand& hand) const {
+    printf("Ini tangan Four of a kind");
     return HandRank::FourOfAKind;
 }
-
 

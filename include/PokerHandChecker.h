@@ -17,4 +17,4 @@
 #include "checkers/ThreeOfAKindChecker.h"
 #include "checkers/TwoPairChecker.h"
 
-std::shared_ptr<IPokerHandChecker> buildDefaultCheckerChain();
+IPokerHandChecker* buildDefaultCheckerChain();

@@ -1,14 +1,7 @@
-#include "checkers/TwoPairChecker.h"
+#include "../../include/checkers/TwoPairChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool TwoPairChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {2, 2, 1});
-}
-
-HandRank TwoPairChecker::currentRank() const {
+HandRank TwoPairChecker::check(const Hand& hand) const {
+    printf("Ini tangan Two Pair");
     return HandRank::TwoPair;
 }
 

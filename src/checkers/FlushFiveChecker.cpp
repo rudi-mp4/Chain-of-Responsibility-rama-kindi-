@@ -1,15 +1,9 @@
-#include "checkers/FlushFiveChecker.h"
+#include "../../include/checkers/FlushFiveChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool FlushFiveChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {5}) && isFlush(hand);
-}
-
-HandRank FlushFiveChecker::currentRank() const {
+HandRank FlushFiveChecker::check(const Hand& hand) const {
+    printf("Ini tangan Flush Five");
     return HandRank::FlushFive;
 }
+
 
 
