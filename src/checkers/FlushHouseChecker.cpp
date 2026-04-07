@@ -1,15 +1,8 @@
-#include "checkers/FlushHouseChecker.h"
+#include "../../include/checkers/FlushHouseChecker.h"
 
-#include <vector>
-
-#include "CheckerUtils.h"
-
-bool FlushHouseChecker::matches(const Hand& hand) const {
-    return hasPattern(hand, {3, 2}) && isFlush(hand);
-}
-
-HandRank FlushHouseChecker::currentRank() const {
-    return HandRank::FlushHouse;
+HandRank FlushHouseChecker::check(const Hand& hand) const {
+    printf("Ini tangan Flush House");
+    return HandRank::FlushHouse; 
 }
 
 

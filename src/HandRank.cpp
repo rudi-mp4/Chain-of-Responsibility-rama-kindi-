@@ -1,4 +1,4 @@
-#include "HandRank.h"
+#include "../include/HandRank.h"
 
 std::string handRankToString(HandRank rank) {
     switch (rank) {

@@ -1,112 +1,47 @@
-#include "Card.h"
-#include "CheckerUtils.h"
-#include "HandRank.h"
-#include "PokerHandChecker.h"
+// #include "../include/PokerHandChecker.h"
+// #include "../include/Card.h"
+#include "../include/PokerHandChecker.h"
+#include "../include/Card.h"
+#include "Card.cpp"
+#include "IPokerHandChecker.cpp"
+#include "HandRank.cpp"
+#include "PokerHandChecker.cpp"
 
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
-
-std::map<int, int> rankCounts(const Hand& hand) {
-    std::map<int, int> counts;
-    for (const Card& card : hand) {
-        ++counts[card.rank];
-    }
-    return counts;
-}
-
-std::vector<int> countPattern(const Hand& hand) {
-    std::vector<int> pattern;
-    for (const auto& entry : rankCounts(hand)) {
-        pattern.push_back(entry.second);
-    }
-
-    std::sort(pattern.begin(), pattern.end(), std::greater<int>());
-    return pattern;
-}
-
-bool hasPattern(const Hand& hand, const std::vector<int>& expected) {
-    return countPattern(hand) == expected;
-}
-
-bool isFlush(const Hand& hand) {
-    const Suit firstSuit = hand[0].suit;
-    for (const Card& card : hand) {
-        if (card.suit != firstSuit) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool isStraight(const Hand& hand) {
-    std::vector<int> ranks;
-    ranks.reserve(hand.size());
-
-    for (const Card& card : hand) {
-        ranks.push_back(card.rank);
-    }
-
-    std::sort(ranks.begin(), ranks.end());
-
-    auto uniqueEnd = std::unique(ranks.begin(), ranks.end());
-    if (uniqueEnd != ranks.end()) {
-        return false;
-    }
-
-    bool consecutive = true;
-    for (std::size_t i = 1; i < ranks.size(); ++i) {
-        if (ranks[i] != ranks[i - 1] + 1) {
-            consecutive = false;
-            break;
-        }
-    }
-    if (consecutive) {
-        return true;
-    }
-
-    const std::vector<int> wheel = {2, 3, 4, 5, 14};
-    return ranks == wheel;
-}
-
-bool isRoyal(const Hand& hand) {
-    std::vector<int> ranks;
-    ranks.reserve(hand.size());
-
-    for (const Card& card : hand) {
-        ranks.push_back(card.rank);
-    }
-
-    std::sort(ranks.begin(), ranks.end());
-    const std::vector<int> royal = {10, 11, 12, 13, 14};
-    return ranks == royal;
-}
-
-namespace {
+// Include all checker implementations
+#include "checkers/HighCardChecker.cpp"
+#include "checkers/OnePairChecker.cpp"
+#include "checkers/TwoPairChecker.cpp"
+#include "checkers/ThreeOfAKindChecker.cpp"
+#include "checkers/StraightChecker.cpp"
+#include "checkers/FlushChecker.cpp"
+#include "checkers/FullHouseChecker.cpp"
+#include "checkers/FourOfAKindChecker.cpp"
+#include "checkers/StraightFlushChecker.cpp"
+#include "checkers/RoyalFlushChecker.cpp"
+#include "checkers/FiveOfAKindChecker.cpp"
+#include "checkers/FlushFiveChecker.cpp"
+#include "checkers/FlushHouseChecker.cpp"
 
 void runSession() {
-    const std::shared_ptr<IPokerHandChecker> checkerChain = buildDefaultCheckerChain();
-    std::cout << "=== Testing ===\n";
-    std::cout << "Generating hand...\n";
+    printf("Welcome to the Poker Hand Checker!\n");
+    
+    // eeee generetae kartu random
+    Hand hand = generateRandomHand();
 
-    const Hand hand = generateRandomHand();
+    // ngeprint kartunya
+    printf("Your hand:\n");
+    for (const auto& card : hand) {
+        printf("%d of %s\n", card.rank, card.suit == Suit::Clubs ? "Clubs" :
+                             card.suit == Suit::Diamonds ? "Diamonds" :
+                             card.suit == Suit::Hearts ? "Hearts" : "Spades");
+    }
 
-    std::cout << "Playing hand...\n";
-    std::cout << "Scoring...\n";
-    std::cout << "Checking Hand...\n";
+    // ngecek kartunya
+    auto checkerChain = buildDefaultCheckerChain();
+    // HandRank rank = checkerChain->check(hand);
+    // printf("\nYour hand rank: %s\n", handRankToString(rank).c_str());
 
-    const HandRank detected = checkerChain->evaluate(hand);
-
-    std::cout << "Detected (" << handRankToString(detected) << ")...\n";
-    std::cout << "Selesai\n";
-    std::cout << "=== End ===\n";
 }
-
-}  // namespace
 
 int main() {
     runSession();

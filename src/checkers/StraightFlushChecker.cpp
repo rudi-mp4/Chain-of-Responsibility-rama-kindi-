@@ -1,13 +1,7 @@
-#include "checkers/StraightFlushChecker.h"
+#include "../../include/checkers/StraightFlushChecker.h"
 
-#include "CheckerUtils.h"
-
-bool StraightFlushChecker::matches(const Hand& hand) const {
-    return isStraight(hand) && isFlush(hand) && !isRoyal(hand);
-}
-
-HandRank StraightFlushChecker::currentRank() const {
+HandRank StraightFlushChecker::check(const Hand& hand) const {
+    printf("Ini tangan Straight Flush");
     return HandRank::StraightFlush;
 }
-
 
