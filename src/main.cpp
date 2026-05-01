@@ -22,11 +22,13 @@
 #include "checkers/FlushFiveChecker.cpp"
 #include "checkers/FlushHouseChecker.cpp"
 
-void runSession() {
-    printf("Welcome to the Poker Hand Checker!\n");
-    
-    // eeee generetae kartu random
-    Hand hand = generateRandomHand();
+// variabel global
+Hand hand;
+
+void runSession(){
+    printf("=== Run Started ===\n");
+    // generate kartu random
+    hand = generateRandomHand();
 
     // ngeprint kartunya
     printf("Your hand:\n");
@@ -36,11 +38,12 @@ void runSession() {
                              card.suit == Suit::Hearts ? "Hearts" : "Spades");
     }
 
-    // ngecek kartunya
-    auto checkerChain = buildDefaultCheckerChain();
-    // HandRank rank = checkerChain->check(hand);
-    // printf("\nYour hand rank: %s\n", handRankToString(rank).c_str());
-
+    // hand.playHand(hand);
+    // int score = scoringRule.scoreHand(hand);
+    // bool win = blindRule.checkBlind(score);
+    // int reward = rewardRule.earnMoney(win, score);
+    // std::cout << "Money gained: " << reward << "\n";
+    printf("=== Run Ended ===\n");
 }
 
 int main() {
