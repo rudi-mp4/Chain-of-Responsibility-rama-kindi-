@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <string>
 
 enum class Suit {
@@ -15,6 +14,6 @@ struct Card {
     Suit suit;
 };
 
-using Hand = std::array<Card, 5>;
-
-Hand generateRandomHand();
+std::string suitToString(Suit suit);
+std::string rankToString(int rank);
+std::string cardToString(const Card& card);

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Card.h"
+#include "Hand.h"
 #include "HandRank.h"
 
 class IPokerHandChecker {
