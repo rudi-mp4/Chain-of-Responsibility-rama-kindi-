@@ -11,6 +11,6 @@ public:
     void setNext(IPokerHandChecker* nextChecker);
     virtual HandRank check(const Hand& hand) const = 0;
 
-private:
+protected:
     IPokerHandChecker* nextChecker = nullptr;
 };
