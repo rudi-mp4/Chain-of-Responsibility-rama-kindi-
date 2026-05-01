@@ -22,11 +22,34 @@
 #include "checkers/FlushFiveChecker.cpp"
 #include "checkers/FlushHouseChecker.cpp"
 
-void runSession() {
-    printf("Welcome to the Poker Hand Checker!\n");
-    
-    // eeee generetae kartu random
-    Hand hand = generateRandomHand();
+// variabel global
+Hand hand;
+// ====== BATAS VARIABEL GLOBAL =====
+
+// ====== FUNGSI DI BAWAH SINI =====
+void printHandRank(HandRank rank) {
+    switch (rank) {
+        case HandRank::HighCard: printf("High Card\n"); break;
+        case HandRank::Pair: printf("One Pair\n"); break;
+        case HandRank::TwoPair: printf("Two Pair\n"); break;
+        case HandRank::ThreeOfAKind: printf("Three of a Kind\n"); break;
+        case HandRank::Straight: printf("Straight\n"); break;
+        case HandRank::Flush: printf("Flush\n"); break;
+        case HandRank::FullHouse: printf("Full House\n"); break;
+        case HandRank::FourOfAKind: printf("Four of a Kind\n"); break;
+        case HandRank::StraightFlush: printf("Straight Flush\n"); break;
+        case HandRank::RoyalFlush: printf("Royal Flush\n"); break;
+        case HandRank::FiveOfAKind: printf("Five of a Kind\n"); break;
+        case HandRank::FlushHouse: printf("Flush House\n"); break;
+        case HandRank::FlushFive: printf("Flush Five\n"); break;
+        default: printf("Unknown hand rank\n");
+    }
+}
+
+void runSession(){
+    printf("=== Run Started ===\n");
+    // generate kartu random
+    hand = generateRandomHand();
 
     // ngeprint kartunya
     printf("Your hand:\n");
@@ -36,11 +59,16 @@ void runSession() {
                              card.suit == Suit::Hearts ? "Hearts" : "Spades");
     }
 
-    // ngecek kartunya
-    auto checkerChain = buildDefaultCheckerChain();
-    // HandRank rank = checkerChain->check(hand);
-    // printf("\nYour hand rank: %s\n", handRankToString(rank).c_str());
-
+    // ngecheck kartunya
+    IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
+    HandRank rank = checkerChain->check(hand);
+    printHandRank(rank);
+    
+    // int score = scoringRule.scoreHand(hand);
+    // bool win = blindRule.checkBlind(score);
+    // int reward = rewardRule.earnMoney(win, score);
+    // std::cout << "Money gained: " << reward << "\n";
+    printf("=== Run Ended ===\n");
 }
 
 int main() {
