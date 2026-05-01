@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-Hand generateRandomDeck() {
+Hand generateRandomHand() {
     std::vector<Card> fullDeck;
     fullDeck.reserve(52);
 

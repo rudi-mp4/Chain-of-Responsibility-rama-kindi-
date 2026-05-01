@@ -2,10 +2,16 @@
 // #include "../include/Card.h"
 #include "../include/PokerHandChecker.h"
 #include "../include/Card.h"
+#include "../include/Hand.h"
+#include "../include/HandGenerator.h"
+
+#include <cstdio>
 #include "Card.cpp"
+#include "HandGenerator.cpp"
 #include "IPokerHandChecker.cpp"
 #include "HandRank.cpp"
 #include "PokerHandChecker.cpp"
+#include "hand.cpp"
 
 // Include all checker implementations
 #include "checkers/HighCardChecker.cpp"
@@ -23,31 +29,25 @@
 #include "checkers/FlushHouseChecker.cpp"
 
 // variabel global
-Hand hand;
+// Hand hand;
 // ====== BATAS VARIABEL GLOBAL =====
 
 void runSession(){
     printf("=== Run Started ===\n");
-    // generate kartu random
-    hand = generateRandomHand();
+    // Generate random hand
+    Hand deck = generateRandomHand();
+    // Player chooses cards
+    SelectedIndices selected = chooseHand(deck);
+    // Convert to chosenHand format
+    chosenHand hand = convertToHand(deck, selected);
+    // Play the hand (evaluate rank)
+    playHand(hand, selected.size());
 
-    // ngeprint kartunya
-    printf("Your hand:\n");
-    for (const auto& card : hand) {
-        printf("%d of %s\n", card.rank, card.suit == Suit::Clubs ? "Clubs" :
-                             card.suit == Suit::Diamonds ? "Diamonds" :
-                             card.suit == Suit::Hearts ? "Hearts" : "Spades");
-    }
-
-    // ngecheck kartunya
-    IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
-    HandRank rank = checkerChain->check(hand);
-    printf("Your hand rank: %s\n", handRankToString(rank).c_str());
-    
     // int score = scoringRule.scoreHand(hand);
     // bool win = blindRule.checkBlind(score);
     // int reward = rewardRule.earnMoney(win, score);
     // std::cout << "Money gained: " << reward << "\n";
+
     printf("=== Run Ended ===\n");
 }
 
