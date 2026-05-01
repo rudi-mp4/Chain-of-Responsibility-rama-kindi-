@@ -28,7 +28,7 @@
 #include <vector>
 #include <cctype>
 
-void displayDeck(const Deck& deck) {
+void displayDeck(const Hand& deck) {
     printf("\n=== Available Cards ===\n");
     for (std::size_t i = 0; i < deck.size(); ++i) {
         printf("[%zu] %s\n", i, cardToString(deck[i]).c_str());
@@ -36,7 +36,7 @@ void displayDeck(const Deck& deck) {
     printf("\n");
 }
 
-void displaySelectedCards(const Deck& deck, const SelectedIndices& selected) {
+void displaySelectedCards(const Hand& deck, const SelectedIndices& selected) {
     if (selected.empty()) {
         printf("(No cards selected yet)\n");
         return;
@@ -49,7 +49,7 @@ void displaySelectedCards(const Deck& deck, const SelectedIndices& selected) {
     printf("\n");
 }
 
-SelectedIndices chooseHand(const Deck& deck) {
+SelectedIndices chooseHand(const Hand& deck) {
     printf("\n--- Choose Hand ---\n");
     displayDeck(deck);
     
@@ -100,15 +100,15 @@ SelectedIndices chooseHand(const Deck& deck) {
     return selected;
 }
 
-Hand convertToHand(const Deck& deck, const SelectedIndices& selected) {
-    Hand hand{};
+chosenHand convertToHand(const Hand& deck, const SelectedIndices& selected) {
+    chosenHand hand{};
     for (std::size_t i = 0; i < selected.size(); ++i) {
         hand[i] = deck[selected[i]];
     }
     return hand;
 }
 
-void playHand(const Hand& hand, std::size_t numCards) {
+void playHand(const chosenHand& hand, std::size_t numCards) {
     printf("\n=== Playing Hand ===\n");
     printf("Your selected hand:\n");
     for (std::size_t i = 0; i < numCards; ++i) {
@@ -127,14 +127,14 @@ void runGameSession() {
     printf("---Card Game---\n");
    
     // Generate 8 random cards
-    Deck deck = generateRandomDeck();
+    Hand deck = generateRandomDeck();
     printf("\nRound started! 8 cards generated.\n");
     
     // Player pilih kartu
     SelectedIndices selected = chooseHand(deck);
     
     // Play hand langsung
-    Hand hand = convertToHand(deck, selected);
+    chosenHand hand = convertToHand(deck, selected);
     playHand(hand, selected.size());
 }
 

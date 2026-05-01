@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-Deck generateRandomDeck() {
+Hand generateRandomDeck() {
     std::vector<Card> fullDeck;
     fullDeck.reserve(52);
 
@@ -20,10 +20,10 @@ Deck generateRandomDeck() {
     std::shuffle(fullDeck.begin(), fullDeck.end(), rng);
 
     // Ambil 8 kartu pertama
-    Deck deck{};
-    for (std::size_t i = 0; i < deck.size(); ++i) {
-        deck[i] = fullDeck[i];
+    Hand hand{};
+    for (std::size_t i = 0; i < hand.size(); ++i) {
+        hand[i] = fullDeck[i];
     }
 
-    return deck;
+    return hand;
 }
