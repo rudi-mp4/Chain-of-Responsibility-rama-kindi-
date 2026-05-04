@@ -4,5 +4,5 @@
 
 class FlushChecker final : public IPokerHandChecker {
 protected:
-    HandRank check(const Hand& hand) const override;
+    HandRank check(const chosenHand& hand) const override;
 };

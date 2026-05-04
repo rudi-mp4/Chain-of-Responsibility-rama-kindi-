@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 // Implementasi fungsi terkait hand (display, input, dll)
 void displayDeck(const Hand& deck) {
@@ -28,9 +29,17 @@ void displaySelectedCards(const Hand& deck, const SelectedIndices& selected) {
     printf("\n");
 }
 
+// urutkan kartu hand berdasarkan rank, dari tertinggi ke terkecil
+void sortHandByRank(Hand& hand) {
+    std::sort(hand.begin(), hand.end(), [](const Card& a, const Card& b) {
+        return a.rank > b.rank; // urutkan dari tertinggi ke terkecil
+    });
+}
+
 // Fungsi untuk memilih kartu dari deck
-SelectedIndices chooseHand(const Hand& deck) {
+SelectedIndices chooseHand(Hand& deck) {
     printf("\n--- Choose Hand ---\n");
+    sortHandByRank(deck);
     displayDeck(deck);
     
     printf("Enter card indices separated by space (e.g., 3 1 2 5 4): ");
@@ -97,15 +106,9 @@ void playHand(const chosenHand& hand, std::size_t numCards) {
         printf("%s\n", cardToString(hand[i]).c_str());
     }
     
-    // Convert chosenHand to Hand format for checker chain
-    Hand handToCheck{};
-    for (std::size_t i = 0; i < numCards; ++i) {
-        handToCheck[i] = hand[i];
-    }
-    
     // Get the checker chain and evaluate the hand
     IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
-    HandRank rank = checkerChain->check(handToCheck);
+    HandRank rank = checkerChain->check(hand);
     // Display the result
     printf("\n*** Hand Rank: %s ***\n", handRankToString(rank).c_str());
     

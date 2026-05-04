@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <array>
 
 #include "Card.h"
 #include "Hand.h"
@@ -10,7 +11,7 @@ class IPokerHandChecker {
 public:
     virtual ~IPokerHandChecker() = default;
     void setNext(IPokerHandChecker* nextChecker);
-    virtual HandRank check(const Hand& hand) const = 0;
+    virtual HandRank check(const chosenHand& chosenHand) const = 0;
 
 protected:
     IPokerHandChecker* nextChecker = nullptr;
