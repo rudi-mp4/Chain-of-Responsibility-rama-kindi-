@@ -1,5 +1,6 @@
-//#include "../include/PokerHandChecker.h"
+#include "../include/PokerHandChecker.h"
 #include "../include/Hand.h"
+#include "../include/HandRank.h"
 #include <cstdio>
 #include <iostream>
 #include <sstream>
@@ -96,10 +97,17 @@ void playHand(const chosenHand& hand, std::size_t numCards) {
         printf("%s\n", cardToString(hand[i]).c_str());
     }
     
-    // TODO: Integrate dengan checker chain
-    // IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
-    // HandRank rank = checkerChain->check(hand);
-    // printf("Your hand rank: %s\n", handRankToString(rank).c_str());
+    // Convert chosenHand to Hand format for checker chain
+    Hand handToCheck{};
+    for (std::size_t i = 0; i < numCards; ++i) {
+        handToCheck[i] = hand[i];
+    }
+    
+    // Get the checker chain and evaluate the hand
+    IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
+    HandRank rank = checkerChain->check(handToCheck);
+    // Display the result
+    printf("\n*** Hand Rank: %s ***\n", handRankToString(rank).c_str());
     
     printf("\n[Hand played!]\n");
 }
