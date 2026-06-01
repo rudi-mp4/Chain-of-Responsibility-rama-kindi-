@@ -1,7 +1,7 @@
 #ifndef BLIND_STATE_H
 #define BLIND_STATE_H
 
-#include "../commands/RewardCommand.h"
+#include "../reward command/RewardCommand.h"
 #include <memory>
 #include <string>
 

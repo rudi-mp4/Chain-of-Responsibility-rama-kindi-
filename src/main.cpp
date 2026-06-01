@@ -3,8 +3,14 @@
 #include "../include/Hand.h"
 #include "../include/HandGenerator.h"
 #include "../include/scoring/HandResolver.h"
-#include "../include/scoring/ScoringPrinter.h"
 #include "../include/scoring/HandScoreTable.h"
+
+// Joker System includes
+#include "../include/jokers/ScoreContext.h"
+#include "../include/jokers/JokerManager.h"
+#include "../include/jokers/PairJoker.h"
+#include "../include/jokers/FlatChipJoker.h"
+#include "../include/jokers/GameManager.h"
 
 #include <cstdio>
 #include "Card.cpp"
@@ -30,10 +36,9 @@
 #include "checkers/FlushHouseChecker.cpp"
 
 // Include scoring implementations
-#include "scoring/HandScoreTable.cpp"
-#include "scoring/ScoringRule.cpp"
-#include "scoring/HandResolver.cpp"
-#include "scoring/ScoringPrinter.cpp"
+
+// Include Joker implementations
+
 
 // variabel global
 // Hand hand;
@@ -41,30 +46,25 @@
 
 void runSession(){
     printf("=== Run Started ===\n");
+    
+    // Setup Joker Manager dan Jokers
+    JokerManager jokerManager;
+    GameManager::setupJokers(jokerManager);
+    
     // Generate random hand
     Hand deck = generateRandomHand();
     // Player chooses cards
     SelectedIndices selected = chooseHand(deck);
     // Convert to chosenHand format
     chosenHand hand = convertToHand(deck, selected);
-    // Play the hand (evaluate rank)
+    // Play the hand
     playHand(hand, selected.size());
-
     // Resolve scoring dengan HandResolver
     IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
     HandResolver resolver(checkerChain);
     PlayedHandResult result = resolver.resolveHand(hand, 1);
     
-    // Print hand evaluation
-    printHandEvaluation(result);
-
-    // int score = scoringRule.scoreHand(hand);
-    // bool win = blindRule.checkBlind(score);
-    // int reward = rewardRule.earnMoney(win, score);
-    // std::cout << "Money gained: " << reward << "\n";
-
     printf("\n[Hand played!]\n");
-    printf("=== Run Ended ===\n");
 }
 
 int main() {
