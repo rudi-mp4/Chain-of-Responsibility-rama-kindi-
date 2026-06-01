@@ -10,7 +10,8 @@
 #include "../include/jokers/JokerManager.h"
 #include "../include/jokers/PairJoker.h"
 #include "../include/jokers/FlatChipJoker.h"
-#include "../include/jokers/GameManager.h"
+
+#include "../include/GameManager.h"
 
 #include <cstdio>
 #include "Card.cpp"
@@ -36,11 +37,17 @@
 #include "checkers/FlushHouseChecker.cpp"
 
 // Include scoring implementations
+#include "scoring/HandScoreTable.cpp"
+#include "scoring/ScoringRule.cpp"
+#include "scoring/HandResolver.cpp"
 
 // Include Joker implementations
+#include "jokers/JokerManager.cpp"
+#include "jokers/PairJoker.cpp"
+#include "jokers/FlatChipJoker.cpp"
 
-
-// variabel global
+// Include GameManager
+#include "GameManager.cpp"
 // Hand hand;
 // ====== BATAS VARIABEL GLOBAL =====
 
