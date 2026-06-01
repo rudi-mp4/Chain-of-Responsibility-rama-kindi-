@@ -6,7 +6,7 @@
 
 namespace {
 constexpr int kMinAnte = 1;
-constexpr int kBossBlindBaseTarget = 600;
+constexpr int kBossBlindBaseTarget = 180;
 constexpr int kBossBlindBaseReward = 200;
 }
 

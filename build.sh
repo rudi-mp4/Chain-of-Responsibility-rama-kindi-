@@ -33,6 +33,16 @@ g++ -I include -std=c++17 -o game \
   src/checkers/FiveOfAKindChecker.cpp \
   src/checkers/FlushFiveChecker.cpp \
   src/checkers/FlushHouseChecker.cpp \
+  src/jokers/JokerManager.cpp \
+  src/jokers/PairJoker.cpp \
+  src/jokers/FlatChipJoker.cpp \
+  src/shop/Shop.cpp \
+  src/shop/ShopInventory.cpp \
+  src/shop/ShopItem.cpp \
+  src/scoring/HandScoreTable.cpp \
+  src/scoring/ScoringRule.cpp \
+  src/scoring/HandResolver.cpp \
+  src/GameManager.cpp \
   2>&1
 
 echo "Build complete. Executable: game"

@@ -6,7 +6,7 @@
 
 namespace {
 constexpr int kMinAnte = 1;
-constexpr int kBigBlindBaseTarget = 450;
+constexpr int kBigBlindBaseTarget = 100;
 constexpr int kBigBlindBaseReward = 100;
 }
 

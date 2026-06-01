@@ -7,7 +7,16 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "-std=c++17",
+                "-I", "${workspaceFolder}/include",
+                "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}/src/blinds/*.cpp",
+                "${workspaceFolder}/src/commands/*.cpp",
+                "${workspaceFolder}/src/reward command/*.cpp",
+                "${workspaceFolder}/src/checkers/*.cpp",
+                "${workspaceFolder}/src/jokers/*.cpp",
+                "${workspaceFolder}/src/shop/*.cpp",
+                "${workspaceFolder}/src/scoring/*.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
