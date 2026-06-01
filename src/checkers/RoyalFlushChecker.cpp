@@ -1,4 +1,6 @@
 #include "../../include/checkers/RoyalFlushChecker.h"
+#include <algorithm>
+#include <array>
 
 HandRank RoyalFlushChecker::check(const chosenHand& hand) const {
     if(hand[4].rank != 0){

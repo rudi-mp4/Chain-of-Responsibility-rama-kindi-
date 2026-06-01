@@ -37,56 +37,93 @@ void sortHandByRank(Hand& hand) {
 }
 
 // Fungsi untuk memilih kartu dari deck
-SelectedIndices chooseHand(Hand& deck) {
+HandAction chooseHand(Hand& deck) {
     printf("\n--- Choose Hand ---\n");
     sortHandByRank(deck);
     displayDeck(deck);
     
-    printf("Enter card indices separated by space (e.g., 3 1 2 5 4): ");
+    printf("Enter card indices separated by space, then 'p' to Play or 'd' to Discard\n");
+    printf("(e.g., '1 2 3 p' or '0 4 d'): ");
+    
     std::string input;
     std::getline(std::cin, input);
     
-    SelectedIndices selected;
+    // Clean up input to handle trailing space or mixed input
     std::istringstream iss(input);
-    int idx;
+    std::vector<std::string> tokens;
+    std::string token;
+    while (iss >> token) {
+        tokens.push_back(token);
+    }
     
-    while (iss >> idx) {
-        // Validate index range
-        if (idx < 0 || idx >= 8) {
-            printf("Invalid index %d! Please enter 0-7\n", idx);
-            return chooseHand(deck);  // Retry
-        }
-        
-        // Check if already selected
-        bool alreadySelected = false;
-        for (int sel : selected) {
-            if (sel == idx) {
-                alreadySelected = true;
-                break;
+    if (tokens.empty()) {
+        printf("Empty input! Please try again.\n");
+        return chooseHand(deck);
+    }
+    
+    HandAction action;
+    bool commandFound = false;
+    std::string lastToken = tokens.back();
+    
+    if (lastToken == "p" || lastToken == "P") {
+        action.type = HandActionType::Play;
+        tokens.pop_back();
+        commandFound = true;
+    } else if (lastToken == "d" || lastToken == "D") {
+        action.type = HandActionType::Discard;
+        tokens.pop_back();
+        commandFound = true;
+    } else {
+        // Default to Play if no command, but better to be explicit
+        printf("No command found (p/d). Defaulting to Play.\n");
+        action.type = HandActionType::Play;
+    }
+    
+    for (const auto& t : tokens) {
+        try {
+            int idx = std::stoi(t);
+            // Validate index range
+            if (idx < 0 || idx >= 8) {
+                printf("Invalid index %d! Please enter 0-7\n", idx);
+                return chooseHand(deck);  // Retry
             }
+            
+            // Check if already selected
+            bool alreadySelected = false;
+            for (int sel : action.indices) {
+                if (sel == idx) {
+                    alreadySelected = true;
+                    break;
+                }
+            }
+            
+            if (alreadySelected) {
+                printf("Duplicate index %d! Please select different cards.\n", idx);
+                return chooseHand(deck);  // Retry
+            }
+            
+            action.indices.push_back(idx);
+        } catch (...) {
+            printf("Invalid token '%s'! Please use numbers for indices.\n", t.c_str());
+            return chooseHand(deck);
         }
-        
-        if (alreadySelected) {
-            printf("Duplicate index %d! Please select different cards.\n", idx);
-            return chooseHand(deck);  // Retry
-        }
-        
-        selected.push_back(idx);
     }
     
     // Validate selection count
-    if (selected.empty()) {
+    if (action.indices.empty()) {
         printf("Please select at least 1 card!\n");
         return chooseHand(deck);  // Retry
     }
     
-    if (selected.size() > 5) {
-        printf("Maximum 5 cards! You selected %zu\n", selected.size());
+    if (action.indices.size() > 5) {
+        printf("Maximum 5 cards! You selected %zu\n", action.indices.size());
         return chooseHand(deck);  // Retry
     }
     
-    displaySelectedCards(deck, selected);
-    return selected;
+    displaySelectedCards(deck, action.indices);
+    printf("Action: %s\n", (action.type == HandActionType::Play ? "PLAY" : "DISCARD"));
+    
+    return action;
 }
 
 // Convert selected indices to actual chosen hand
