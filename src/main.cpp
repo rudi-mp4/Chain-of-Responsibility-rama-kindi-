@@ -12,6 +12,8 @@
 #include "../include/blind state/SmallBlindState.h"
 #include "../include/reward command/GameSession.h"
 #include "../include/HandRank.h"
+#include "../include/jokers/PairJoker.h"
+#include "../include/jokers/FlatChipJoker.h"
 
 #include <iostream>
 #include <string>
@@ -19,10 +21,23 @@
 #include <vector>
 
 /**
+ * createJokerFromMetadata
+ * Helper untuk membuat instance Joker berdasarkan metadata dari ShopItem.
+ */
+std::unique_ptr<Joker> createJokerFromMetadata(const std::string& metadata) {
+    if (metadata == "PairJoker") {
+        return std::make_unique<PairJoker>();
+    } else if (metadata == "FlatChipJoker") {
+        return std::make_unique<FlatChipJoker>();
+    }
+    return nullptr;
+}
+
+/**
  * handleShop
  * Mengelola fase toko di mana pemain bisa membeli item (Joker, dll).
  */
-void handleShop(Shop& shop, ShopInventory& inventory) {
+void handleShop(Shop& shop, ShopInventory& inventory, JokerManager& jokerManager) {
     bool inShop = true;
     while (inShop) {
         std::cout << "\n========================================" << std::endl;
@@ -51,6 +66,16 @@ void handleShop(Shop& shop, ShopInventory& inventory) {
                 if (item) {
                     if (inventory.buyItem(*item)) {
                         std::cout << ">> Successfully bought " << item->getName() << "!" << std::endl;
+                        
+                        // Jika item adalah Joker, tambahkan ke JokerManager
+                        if (item->getType() == ItemType::JOKER) {
+                            auto joker = createJokerFromMetadata(item->getMetadata());
+                            if (joker) {
+                                jokerManager.addJoker(std::move(joker));
+                                std::cout << ">> Joker activated!" << std::endl;
+                            }
+                        }
+                        
                         shop.removeItemById(choice);
                     } else {
                         std::cout << ">> Not enough chips!" << std::endl;
@@ -77,7 +102,7 @@ int main() {
     shop.initializeDefaultItems();
     
     JokerManager jokerManager;
-    GameManager::setupJokers(jokerManager);
+    // GameManager::setupJokers(jokerManager); // Opsional: Berikan joker awal
     
     // Inisialisasi Resolver
     IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
@@ -94,6 +119,7 @@ int main() {
         std::cout << "Target Score:  " << currentBlind->getTargetScore() << std::endl;
         std::cout << "Reward Money:  " << currentBlind->getRewardMoney() << " chips" << std::endl;
         std::cout << "Your Chips:    " << inventory.getChips() << std::endl;
+        std::cout << "Active Jokers: " << jokerManager.getJokerCount() << std::endl;
         std::cout << "----------------------------------------" << std::endl;
         
         std::cout << "\n1. Play Blind" << std::endl;
@@ -155,8 +181,8 @@ int main() {
             if (action.type == HandActionType::Play) {
                 chosenHand hand = convertToHand(deck, action.indices);
                 
-                // Resolusi skor
-                PlayedHandResult result = resolver.resolveHand(hand, 1);
+                // Resolusi skor dengan menyertakan JokerManager
+                PlayedHandResult result = resolver.resolveHand(hand, 1, &jokerManager);
                 
                 std::cout << "\n========================================" << std::endl;
                 std::cout << "Played: " << handRankToString(result.handType) << std::endl;
@@ -175,8 +201,6 @@ int main() {
                 if (session.getRemainingDiscards() > 0) {
                     session.spendDiscard();
                     std::cout << ">> Discarded " << action.indices.size() << " cards." << std::endl;
-                    // In Balatro, discarded cards are replaced. In this simple CLI, 
-                    // we just loop and generate a new full random hand for simplicity.
                 } else {
                     std::cout << ">> No discards remaining! Hand must be played." << std::endl;
                 }
@@ -192,7 +216,7 @@ int main() {
             inventory.addChips(rewardMoney);
             
             // Fase Toko
-            handleShop(shop, inventory);
+            handleShop(shop, inventory, jokerManager);
             
             // Pindah ke blind berikutnya
             currentBlind = currentBlind->getNextState();

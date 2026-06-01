@@ -6,6 +6,7 @@
 #include "ScoringRule.h"
 #include "../Hand.h"
 #include "../IPokerHandChecker.h"
+#include "../jokers/JokerManager.h"
 
 /**
  * HandResolver
@@ -39,7 +40,7 @@ public:
      * @param level Level dari hand ini
      * @return PlayedHandResult yang berisi hasil akhir scoring
      */
-    PlayedHandResult resolveHand(const chosenHand& hand, int level = 1);
+    PlayedHandResult resolveHand(const chosenHand& hand, int level = 1, JokerManager* jokerManager = nullptr);
     
     /**
      * Setter untuk PokerHandChecker (dalam hal perlu diganti)

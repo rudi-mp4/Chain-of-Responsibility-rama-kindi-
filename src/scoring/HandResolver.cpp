@@ -12,7 +12,7 @@ HandResolver::HandResolver(IPokerHandChecker* checker,
       scoreTable(std::move(table)),
       scoringRule(std::move(rule)) {}
 
-PlayedHandResult HandResolver::resolveHand(const chosenHand& hand, int level) {
+PlayedHandResult HandResolver::resolveHand(const chosenHand& hand, int level, JokerManager* jokerManager) {
     // Step 1: Evaluasi hand menggunakan checker
     HandRank handType = pokerHandChecker->check(hand);
     
@@ -24,12 +24,24 @@ PlayedHandResult HandResolver::resolveHand(const chosenHand& hand, int level) {
     int adjustedChips = scoringRule->calculateAdjustedChips(baseChips, level);
     int adjustedMult = scoringRule->calculateAdjustedMult(baseMult, level);
     
-    // Step 4: Hitung final score
-    int finalScore = scoringRule->calculateScore(adjustedChips, adjustedMult);
+    // --- BARU: Integrasi Joker ---
+    // Step 4: Buat ScoreContext dan jalankan Joker Pipeline
+    std::vector<Card> cards;
+    for (const auto& card : hand) {
+        if (card.rank != 0) cards.push_back(card);
+    }
     
-    // Step 5: Buat dan kembalikan hasil
-    std::vector<Card> cards(hand.begin(), hand.end());
-    return PlayedHandResult(cards, handType, level, adjustedChips, adjustedMult, finalScore);
+    ScoreContext context(cards, handType, level, adjustedChips, adjustedMult);
+    
+    if (jokerManager) {
+        jokerManager->executeJokerPipeline(context);
+    }
+    
+    // Step 5: Hitung final score dari context yang mungkin sudah dimodifikasi Joker
+    int finalScore = context.getFinalScore();
+    
+    // Step 6: Buat dan kembalikan hasil
+    return PlayedHandResult(cards, handType, level, context.chips, context.multiplier, finalScore);
 }
 
 void HandResolver::setChecker(IPokerHandChecker* checker) {
