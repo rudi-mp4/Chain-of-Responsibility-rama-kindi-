@@ -1,9 +1,10 @@
-// #include "../include/PokerHandChecker.h"
-// #include "../include/Card.h"
 #include "../include/PokerHandChecker.h"
 #include "../include/Card.h"
 #include "../include/Hand.h"
 #include "../include/HandGenerator.h"
+#include "../include/scoring/HandResolver.h"
+#include "../include/scoring/ScoringPrinter.h"
+#include "../include/scoring/HandScoreTable.h"
 
 #include <cstdio>
 #include "Card.cpp"
@@ -28,6 +29,12 @@
 #include "checkers/FlushFiveChecker.cpp"
 #include "checkers/FlushHouseChecker.cpp"
 
+// Include scoring implementations
+#include "scoring/HandScoreTable.cpp"
+#include "scoring/ScoringRule.cpp"
+#include "scoring/HandResolver.cpp"
+#include "scoring/ScoringPrinter.cpp"
+
 // variabel global
 // Hand hand;
 // ====== BATAS VARIABEL GLOBAL =====
@@ -43,11 +50,20 @@ void runSession(){
     // Play the hand (evaluate rank)
     playHand(hand, selected.size());
 
+    // Resolve scoring dengan HandResolver
+    IPokerHandChecker* checkerChain = buildDefaultCheckerChain();
+    HandResolver resolver(checkerChain);
+    PlayedHandResult result = resolver.resolveHand(hand, 1);
+    
+    // Print hand evaluation
+    printHandEvaluation(result);
+
     // int score = scoringRule.scoreHand(hand);
     // bool win = blindRule.checkBlind(score);
     // int reward = rewardRule.earnMoney(win, score);
     // std::cout << "Money gained: " << reward << "\n";
 
+    printf("\n[Hand played!]\n");
     printf("=== Run Ended ===\n");
 }
 
